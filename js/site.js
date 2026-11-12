@@ -84,21 +84,33 @@
     });
   }
 
-  /* preview loops: play what is on screen, pause the rest */
-  var loopsHeld = false;
-  var loopIO = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { en.target._vis = en.isIntersecting; syncLoop(en.target); });
-  }, { threshold: 0.55 }) : null;
-  function syncLoop(v) {
-    if (reduced) return;
-    if (v._vis && !loopsHeld) {
-      if (!v.getAttribute('src')) v.setAttribute('src', v.getAttribute('data-src'));
-      var pr = v.play();
-      if (pr && pr.then) pr.then(function () { v.classList.add('is-on'); }).catch(function () {});
-    } else { v.pause(); }
+  /* preview loops: play only while the mouse (or keyboard focus) is on a video */
+  var loopsHeld = false, LOOP_BTN = '.tile-btn, .promo-btn';
+  function loopOf(btn) { return btn ? $('video[data-src]', btn) : null; }
+  function playLoop(btn) {
+    var v = loopOf(btn); if (!v || reduced || loopsHeld) return;
+    if (!v.getAttribute('src')) v.setAttribute('src', v.getAttribute('data-src'));
+    var pr = v.play();
+    if (pr && pr.then) pr.then(function () { v.classList.add('is-on'); }).catch(function () {});
   }
-  function watchLoops(scope) { if (loopIO) $$('video[data-src]', scope).forEach(function (v) { loopIO.observe(v); }); }
-  function holdLoops(hold) { loopsHeld = hold; $$('video[data-src]').forEach(syncLoop); }
+  function stopLoop(btn) {
+    var v = loopOf(btn); if (!v) return;
+    v.pause(); v.classList.remove('is-on');
+    try { if (v.readyState) v.currentTime = 0; } catch (e) {}
+  }
+  function loopBtn(e) { return e.target && e.target.closest ? e.target.closest(LOOP_BTN) : null; }
+  doc.addEventListener('mouseover', function (e) { var b = loopBtn(e); if (b && !b.contains(e.relatedTarget)) playLoop(b); });
+  doc.addEventListener('mouseout', function (e) { var b = loopBtn(e); if (b && !b.contains(e.relatedTarget)) stopLoop(b); });
+  doc.addEventListener('focusin', function (e) { var b = loopBtn(e); if (b && b.matches(':focus-visible')) playLoop(b); });
+  doc.addEventListener('focusout', function (e) { var b = loopBtn(e); if (b) stopLoop(b); });
+  function watchLoops() {}
+  function holdLoops(hold) { loopsHeld = hold; if (hold) $$(LOOP_BTN).forEach(stopLoop); }
+  /* fetch the small preview files once the page is idle, so a hover starts instantly */
+  function warmLoops() {
+    if (reduced || !window.matchMedia('(hover: hover)').matches) return;
+    $$('video[data-src]').forEach(function (v) { if (!v.getAttribute('src')) { v.preload = 'auto'; v.setAttribute('src', v.getAttribute('data-src')); } });
+  }
+  window.addEventListener('load', function () { setTimeout(warmLoops, 1500); });
 
   /* arrows + drag to scroll */
   var prev = $('.strip-nav.prev'), next = $('.strip-nav.next');
