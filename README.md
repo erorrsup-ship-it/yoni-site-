@@ -27,4 +27,7 @@ The looks ("themes") that each video or website brings are defined near the top 
 
 ## Credits
 
+Animation runs on [anime.js](https://animejs.com) v4.5.0 (MIT), bundled in `js/vendor/anime.umd.min.js` with its license next to it. To update it, replace that file with `dist/bundles/anime.umd.min.js` from a newer `animejs` package.
+
+
 The motion effects in `js/fx.js` are plain-JavaScript ports of components from [React Bits](https://reactbits.dev) (MIT + Commons Clause): Split Text, Blur Text, Rotating Text, Scroll Reveal, Count Up, Magnet, Flowing Menu, Tilted Card and Click Spark.

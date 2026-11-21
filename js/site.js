@@ -173,7 +173,7 @@
     });
   }, { threshold: 0.12 }) : null;
   function countEight() {
-    var b = $('#eight'); if (!b || reduced) return;
+    var b = $('#eight'); if (!b || reduced || window.anime) return;
     var n = 0; b.textContent = '0';
     var t = setInterval(function () { n++; b.textContent = String(n); if (n >= 8) clearInterval(t); }, 85);
   }
@@ -330,8 +330,15 @@
       c.style.cssText = 'left:' + src.left + 'px;top:' + src.top + 'px;width:' + src.width + 'px;height:' + src.height + 'px';
       doc.body.appendChild(c);
       player.box.style.visibility = 'hidden';
-      var a = c.animate([{ transform: 'none' }, { transform: 'translate(' + (t.left - src.left) + 'px,' + (t.top - src.top) + 'px) scale(' + (t.width / src.width) + ',' + (t.height / src.height) + ')' }], { duration: 720, easing: EASE, fill: 'forwards' });
-      a.onfinish = function () { player.box.style.visibility = ''; c.remove(); if (pvOpen) player.play(); };
+      var done = function () { player.box.style.visibility = ''; c.remove(); if (pvOpen) player.play(); };
+      var A = window.anime;
+      if (A && A.animate && A.spring) {
+        // anime.js spring: the tile flies into the player and settles with a small bounce
+        A.animate(c, { translateX: t.left - src.left, translateY: t.top - src.top, scaleX: t.width / src.width, scaleY: t.height / src.height, ease: A.spring({ bounce: 0.22, duration: 760 }), onComplete: done });
+      } else {
+        var a = c.animate([{ transform: 'none' }, { transform: 'translate(' + (t.left - src.left) + 'px,' + (t.top - src.top) + 'px) scale(' + (t.width / src.width) + ',' + (t.height / src.height) + ')' }], { duration: 720, easing: EASE, fill: 'forwards' });
+        a.onfinish = done;
+      }
     });
   }
   function closeProject(keepHash) {
