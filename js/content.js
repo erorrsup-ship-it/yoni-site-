@@ -119,5 +119,14 @@ window.SITE = {
       cta: { en: "Visit the site", he: "לאתר" },
       text: { en: "Website for a gardener. Designed and directed by me, built with AI coding tools.", he: "אתר לגנן. עיצוב והכוונה שלי, בנייה עם כלי AI." }
     }
+  ],
+
+  // Services list ("What I do"). Hovering a row slides in a band with these preview images.
+  services: [
+    { href: "#work", en: ["Meta ads", "Paid social that stops the scroll"], he: ["מודעות מטא", "מודעות ממומנות שעוצרות את הגלילה"], imgs: ["media/g05.jpg", "media/g04.jpg", "media/g01.jpg"] },
+    { href: "#work", en: ["Short-form", "Reels, TikToks and Shorts"], he: ["סרטונים קצרים", "רילס, טיקטוק ושורטס"], imgs: ["media/b01.jpg", "media/b03.jpg", "media/g02.jpg"] },
+    { href: "#work", en: ["Full production", "Script, shoot and edit"], he: ["הפקה מלאה", "תסריט, צילום ועריכה"], imgs: ["media/b02.jpg", "media/b01.jpg", "media/b03.jpg"] },
+    { href: "#more", en: ["Motion graphics", "Ads with no presenter and no shoot"], he: ["מושן גרפיקס", "מודעות בלי פרזנטור ובלי יום צילום"], imgs: ["media/promo.jpg", "media/promo.jpg"] },
+    { href: "#more", en: ["Websites", "Designed and directed by me"], he: ["אתרים", "עיצוב והכוונה שלי"], imgs: ["media/web-ella.jpg", "media/web-eyal.jpg"] }
   ]
 };

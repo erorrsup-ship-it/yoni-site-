@@ -24,3 +24,7 @@ The looks ("themes") that each video or website brings are defined near the top 
 - `js/content.js`: all text, projects and videos
 - `js/site.js`: behaviour (strip, player, language switch)
 - `media/`: videos, preview loops, posters, screenshots
+
+## Credits
+
+The motion effects in `js/fx.js` are plain-JavaScript ports of components from [React Bits](https://reactbits.dev) (MIT + Commons Clause): Split Text, Blur Text, Rotating Text, Scroll Reveal, Count Up, Magnet, Flowing Menu, Tilted Card and Click Spark.
